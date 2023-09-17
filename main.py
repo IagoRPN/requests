@@ -1,14 +1,26 @@
 import requests 
 
 username = 'amzn'
-api_base_url = f'https://api.github.com/users/{username}'
+url = f"https://api.github.com/users/{username}/followers"
 
-r = requests.get(api_base_url)
-print(r.status_code)
+access_token = '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'
+headers = {'Authorization': 'Bearer ' + access_token,
+           'X-GitHub-Api-Version': '2022-11-28'}
 
-dados = r.json()
+page = 1
+follower_list = []
 
-print(f"Nome do usuário: {dados['name']}")
-print(f"Nome do usuário: {dados['login']}")
-print(f"Nome do usuário: {dados['created_at']}")
-print(f"Nome do usuário: {dados['public_repos']}")
+while True:
+
+    url_page = f"{url}?page={page}"
+    response = requests.get(url, headers=headers)
+    print(response.status_code)
+
+    followers = response.json()
+    if (len(followers)) == 0:
+        break
+
+    follower_list.append(followers)
+    page += 1
+    print(url_page)
+    print(page)
